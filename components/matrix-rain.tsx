@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-
+import { MusicPlayer } from './music-player'
 
 export default function MatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -46,7 +46,8 @@ export default function MatrixRain() {
     const columnWidth = 20
     const columns = Math.floor(canvas.width / columnWidth)
     const drops: number[] = Array(columns).fill(1)
-    const matrixChars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890"
+    const matrixChars =
+      'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ1234567890'
 
     // Create the draw function with canvas and ctx in scope
     const draw = () => {
@@ -60,11 +61,11 @@ export default function MatrixRain() {
       // Draw characters
       drops.forEach((drop, i) => {
         const char = matrixChars[Math.floor(Math.random() * matrixChars.length)]
-        
+
         // Random brightness effect
         const brightness = Math.random()
         ctx.fillStyle = `rgba(0, 255, 0, ${brightness})`
-        
+
         // Draw the character
         ctx.fillText(char, i * columnWidth, drop * 20)
 
@@ -72,7 +73,7 @@ export default function MatrixRain() {
         if (drop * 20 > canvas.height && Math.random() > 0.975) {
           drops[i] = 0
         }
-        
+
         // Move drop down
         drops[i]++
       })
@@ -88,23 +89,21 @@ export default function MatrixRain() {
   }, [dimensions])
 
   return (
-    <div className="relative min-h-screen bg-black text-green-500 overflow-hidden">
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full"
-      />
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="relative w-full max-w-xs aspect-[6/1]"> {/* Adjust max width */}
-            <Image
-              src="/matrix-logo.png"
-              alt="The Matrix"
-              fill
-              className="object-contain"
-              priority
-              style={{ objectFit: 'contain' }} // Ensure the image fits well
-            />
-          </div>
+    <div className='relative min-h-screen overflow-hidden bg-black text-green-500'>
+      <canvas ref={canvasRef} className='absolute inset-0 h-full w-full' />
+      <div className='relative z-10 flex min-h-screen flex-col items-center justify-center p-4'>
+        <div className='relative w-full max-w-lg'>
+          <Image
+            src='/matrix-logo-hd.png'
+            alt='The Matrix'
+            width={500}
+            height={500}
+            className='w-full h-auto'
+            priority
+          />
         </div>
+        <MusicPlayer className='fixed bottom-4 right-4' />
       </div>
+    </div>
   )
 }
